@@ -411,25 +411,14 @@ p {
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px;
   flex: none;
 }
-.logo svg {
-  width: 32px;
-  height: 32px;
-  flex: none;
-}
-.logo__txt {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 1.06rem;
-  line-height: 0.97;
-  letter-spacing: -0.032em;
-  color: var(--ink);
-}
-.logo__txt span {
+.logo__img {
   display: block;
-  color: var(--moss);
+  width: auto;
+  height: clamp(42px, calc(var(--u) * 5.2), 52px);
+  max-width: 150px;
+  object-fit: contain;
 }
 
 .nav__links {

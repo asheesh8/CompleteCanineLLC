@@ -90,8 +90,7 @@ def head(title, desc, canonical, robots=""):
 
 def logo(cls=""):
     return f"""<a class="logo {cls}" href="index.html" aria-label="Complete Canine — home">
-  <svg><use href="#i-logo"></use></svg>
-  <span class="logo__txt">Complete<span>Canine</span></span>
+  <img class="logo__img" src="assets/img/complete-canine-logo.png" alt="Complete Canine" width="470" height="174">
 </a>"""
 
 
