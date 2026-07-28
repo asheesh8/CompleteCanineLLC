@@ -1,0 +1,1506 @@
+/* ==========================================================================
+   Complete Canine — Design System
+   Plainfield, NH · Boarding · Daycare · Grooming
+
+   Architecture: every page is ONE SCREEN. No page scrolling, no smooth-scroll,
+   no scroll-triggered animation. Deeper content lives behind tabs.
+   Short/narrow viewports fall back to normal scrolling so nothing is ever
+   clipped out of reach.
+   ========================================================================== */
+
+/* ---------- Tokens ---------- */
+:root {
+  /* Brand greens — evolved from the heritage #97b962 into a brighter lime */
+  --lime: #a8db5a;
+  --lime-deep: #8cc63f;
+  --moss: #5f7f33;
+  --mint: #eaf7d4;
+  --mint-soft: #f3fae6;
+  --mint-wash: #f8fcf1;
+
+  /* Heritage accents */
+  --navy: #1f4165;
+  --pewter: #dbdcd7;
+  --pewter-soft: #ecede7;
+
+  /* Neutrals */
+  --ink: #10120e;
+  --ink-70: #43483d;
+  --ink-50: #6e7466;
+  --line: #e6e8e1;
+  --paper: #f7f7f4;
+  --white: #fff;
+
+  /* Type */
+  --font-display: "Bricolage Grotesque", "Archivo", system-ui, sans-serif;
+  --font-body: "DM Sans", system-ui, -apple-system, sans-serif;
+
+  /* Radii */
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-xl: 30px;
+  --r-pill: 999px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(16, 18, 14, 0.05);
+  --shadow-md: 0 8px 26px rgba(16, 18, 14, 0.07);
+  --shadow-lg: 0 20px 50px rgba(16, 18, 14, 0.1);
+  --shadow-lift: 0 22px 54px rgba(95, 127, 51, 0.16);
+
+  /* Layout */
+  --gut: clamp(18px, 3.2vw, 44px);
+  --maxw: 1280px;
+  --nav-h: 70px;
+
+  /* One-screen rhythm: scales with the SHORTER of width/height so a wide but
+     short window compresses just like a narrow one. The vh coefficient is
+     deliberately tight — short laptop screens are the binding constraint. */
+  --u: min(1vw, 1.42vh);
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  height: 100%;
+}
+body {
+  font-family: var(--font-body);
+  font-size: clamp(14px, calc(9px + 0.45vw), 16px);
+  line-height: 1.6;
+  color: var(--ink-70);
+  background: var(--white);
+  -webkit-font-smoothing: antialiased;
+  height: 100%;
+  overflow: hidden; /* the whole point: no page scroll */
+}
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+img {
+  height: auto;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+}
+:focus-visible {
+  outline: 3px solid var(--lime-deep);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- Typography ---------- */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+}
+.h-hero {
+  font-size: clamp(2rem, calc(var(--u) * 4.6), 4.5rem);
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+}
+.h-1 {
+  font-size: clamp(1.55rem, calc(var(--u) * 3.1), 2.9rem);
+  letter-spacing: -0.034em;
+}
+.h-2 {
+  font-size: clamp(1.25rem, calc(var(--u) * 2.1), 1.9rem);
+  letter-spacing: -0.03em;
+}
+.h-3 {
+  font-size: clamp(1.02rem, calc(var(--u) * 1.5), 1.32rem);
+  line-height: 1.14;
+}
+.h-4 {
+  font-size: clamp(0.94rem, calc(var(--u) * 1.16), 1.06rem);
+  line-height: 1.22;
+}
+.lead {
+  font-size: clamp(0.9rem, calc(var(--u) * 1.16), 1.1rem);
+  line-height: 1.58;
+  color: var(--ink-50);
+  text-wrap: pretty;
+}
+p {
+  text-wrap: pretty;
+}
+.muted {
+  color: var(--ink-50);
+}
+.small {
+  font-size: 0.86em;
+}
+.tight {
+  max-width: 54ch;
+}
+.center {
+  text-align: center;
+}
+
+/* Green highlight on a word */
+.hl {
+  color: var(--moss);
+  position: relative;
+  white-space: nowrap;
+  z-index: 0;
+}
+.hl::after {
+  content: "";
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  bottom: 0.04em;
+  height: 0.3em;
+  background: var(--lime);
+  border-radius: var(--r-pill);
+  z-index: -1;
+  opacity: 0.55;
+  transform: rotate(-0.6deg);
+}
+
+/* ==========================================================================
+   One-screen shell
+   ========================================================================== */
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gut);
+}
+.screen {
+  height: 100dvh;
+  padding-top: var(--nav-h);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+.screen__body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: calc(var(--u) * 1.6);
+}
+.screen--mint {
+  background: linear-gradient(180deg, var(--mint-soft) 0%, var(--white) 62%);
+}
+
+.stack-sm > * + * {
+  margin-top: calc(var(--u) * 1.1);
+}
+.stack > * + * {
+  margin-top: calc(var(--u) * 1.7);
+}
+.grid {
+  display: grid;
+  gap: calc(var(--u) * 1.5);
+}
+.g-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.g-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.g-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(20px, 3.4vw, 56px);
+  align-items: center;
+}
+.split--wide-l {
+  grid-template-columns: 1.12fr 1fr;
+}
+.split--wide-r {
+  grid-template-columns: 1fr 1.12fr;
+}
+
+/* ---------- Badge pill ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px 6px 11px;
+  background: var(--mint);
+  color: var(--moss);
+  border-radius: var(--r-pill);
+  font-size: clamp(0.7rem, calc(var(--u) * 0.86), 0.8rem);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+.badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lime-deep);
+  flex: none;
+}
+.badge--ink {
+  background: var(--ink);
+  color: var(--white);
+}
+.badge--ink::before {
+  background: var(--lime);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 10px 10px 20px;
+  border-radius: var(--r-pill);
+  font-weight: 700;
+  font-size: clamp(0.83rem, calc(var(--u) * 1), 0.95rem);
+  line-height: 1;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.34, 1.4, 0.64, 1), background 0.2s,
+    color 0.2s, border-color 0.2s, box-shadow 0.22s;
+  white-space: nowrap;
+}
+.btn__ico {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: none;
+  transition: transform 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.btn__ico svg {
+  width: 14px;
+  height: 14px;
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+.btn:hover .btn__ico {
+  transform: rotate(45deg);
+}
+.btn:active {
+  transform: translateY(0);
+}
+.btn--primary {
+  background: var(--ink);
+  color: var(--white);
+  box-shadow: var(--shadow-md);
+}
+.btn--primary .btn__ico {
+  background: var(--lime);
+  color: var(--ink);
+}
+.btn--primary:hover {
+  background: #000;
+  box-shadow: var(--shadow-lg);
+}
+.btn--lime {
+  background: var(--lime);
+  color: var(--ink);
+  box-shadow: var(--shadow-md);
+}
+.btn--lime .btn__ico {
+  background: var(--ink);
+  color: var(--lime);
+}
+.btn--lime:hover {
+  background: var(--lime-deep);
+}
+.btn--ghost {
+  background: var(--white);
+  color: var(--ink);
+  border-color: var(--line);
+}
+.btn--ghost .btn__ico {
+  background: var(--mint);
+  color: var(--moss);
+}
+.btn--ghost:hover {
+  border-color: var(--ink);
+}
+.btn--plain {
+  padding: 10px 20px;
+}
+.btn--sm {
+  padding: 8px 8px 8px 16px;
+  font-size: 0.85rem;
+}
+.btn--sm .btn__ico {
+  width: 25px;
+  height: 25px;
+}
+.btn--sm .btn__ico svg {
+  width: 12px;
+  height: 12px;
+}
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+
+/* ==========================================================================
+   Navigation
+   ========================================================================== */
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  padding-top: 12px;
+}
+.nav__wrap {
+  padding-inline: var(--gut);
+}
+.nav__inner {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 8px 8px 18px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(18px) saturate(1.5);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
+  border: 1px solid rgba(230, 232, 225, 0.9);
+  border-radius: var(--r-pill);
+  box-shadow: 0 4px 20px rgba(16, 18, 14, 0.05);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+.logo svg {
+  width: 32px;
+  height: 32px;
+  flex: none;
+}
+.logo__txt {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.06rem;
+  line-height: 0.97;
+  letter-spacing: -0.032em;
+  color: var(--ink);
+}
+.logo__txt span {
+  display: block;
+  color: var(--moss);
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+.nav__links a {
+  padding: 8px 13px;
+  border-radius: var(--r-pill);
+  font-size: 0.89rem;
+  font-weight: 600;
+  color: var(--ink-70);
+  transition: background 0.2s, color 0.2s;
+}
+.nav__links a:hover {
+  background: var(--mint);
+  color: var(--moss);
+}
+.nav__links a.is-active {
+  background: var(--mint);
+  color: var(--moss);
+  font-weight: 700;
+}
+.nav__tel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 0.89rem;
+  padding-right: 2px;
+  white-space: nowrap;
+}
+.nav__tel svg {
+  width: 14px;
+  height: 14px;
+  color: var(--moss);
+}
+
+.burger {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 0;
+  cursor: pointer;
+  place-items: center;
+  flex: none;
+  margin-left: auto;
+}
+.burger span {
+  display: block;
+  width: 17px;
+  height: 2px;
+  background: var(--white);
+  border-radius: 2px;
+  transition: transform 0.28s, opacity 0.2s;
+}
+.burger span + span {
+  margin-top: 4px;
+}
+.burger.is-open span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.burger.is-open span:nth-child(2) {
+  opacity: 0;
+}
+.burger.is-open span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Mobile drawer */
+.drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  background: var(--white);
+  padding: calc(var(--nav-h) + 30px) var(--gut) 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transform: translateY(-100%);
+  transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+  overflow-y: auto;
+}
+.drawer.is-open {
+  transform: translateY(0);
+}
+.drawer__link {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.6rem, 7vw, 2.3rem);
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.drawer__link span {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--moss);
+  background: var(--mint);
+  padding: 5px 11px;
+  border-radius: var(--r-pill);
+}
+.drawer__foot {
+  margin-top: auto;
+  padding-top: 22px;
+  display: grid;
+  gap: 10px;
+}
+
+/* ==========================================================================
+   Hero (home)
+   ========================================================================== */
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1.04fr 0.96fr;
+  gap: clamp(20px, 3vw, 48px);
+  align-items: center;
+}
+.hero__copy > * + * {
+  margin-top: calc(var(--u) * 1.5);
+}
+.hero__art {
+  position: relative;
+  min-width: 0;
+}
+/* An inline <svg> with only a viewBox has no intrinsic size — without an
+   explicit width/height it can collapse to 0. Set both. */
+.hero__art svg.scene {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 620 / 560;
+  max-height: calc(100dvh - var(--nav-h) - var(--u) * 22);
+  overflow: visible;
+}
+
+/* Floating chips over the art */
+.chip {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px 8px 9px;
+  background: var(--white);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-lg);
+  font-size: clamp(0.72rem, calc(var(--u) * 0.88), 0.82rem);
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  z-index: 3;
+}
+.chip__ico {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--mint);
+  display: grid;
+  place-items: center;
+  color: var(--moss);
+  flex: none;
+}
+.chip__ico svg {
+  width: 14px;
+  height: 14px;
+}
+.chip small {
+  display: block;
+  font-weight: 600;
+  font-size: 0.86em;
+  color: var(--ink-50);
+  line-height: 1.2;
+}
+.chip--a {
+  top: 6%;
+  left: -2%;
+}
+.chip--b {
+  bottom: 22%;
+  right: -1%;
+}
+
+/* Blob decor */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 0;
+}
+.blob--1 {
+  width: 420px;
+  height: 420px;
+  background: var(--lime);
+  top: -150px;
+  right: -110px;
+  opacity: 0.24;
+}
+.blob--2 {
+  width: 340px;
+  height: 340px;
+  background: var(--mint);
+  bottom: -150px;
+  left: -130px;
+  opacity: 0.7;
+}
+
+/* Stat strip */
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--u) * 1.2) clamp(18px, 3.2vw, 40px);
+}
+.stat__n {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.2rem, calc(var(--u) * 1.9), 1.85rem);
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.stat__l {
+  font-size: clamp(0.7rem, calc(var(--u) * 0.85), 0.79rem);
+  color: var(--ink-50);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   Service cards (home) — horizontal, compact
+   ========================================================================== */
+.svc {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 10px 16px 10px 10px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.3s,
+    border-color 0.25s;
+  min-width: 0;
+}
+.svc:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lift);
+  border-color: var(--lime);
+}
+.svc__media {
+  width: clamp(56px, calc(var(--u) * 7), 84px);
+  aspect-ratio: 1;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  flex: none;
+  background: var(--mint);
+}
+.svc__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.svc:hover .svc__media img {
+  transform: scale(1.07);
+}
+.svc__body {
+  min-width: 0;
+  flex: 1;
+}
+.svc__body h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.svc__price {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--moss);
+  background: var(--mint);
+  padding: 3px 9px;
+  border-radius: var(--r-pill);
+  letter-spacing: 0;
+}
+.svc__body p {
+  font-size: clamp(0.78rem, calc(var(--u) * 0.94), 0.89rem);
+  color: var(--ink-50);
+  margin-top: 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.svc__go {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--mint);
+  color: var(--moss);
+  display: grid;
+  place-items: center;
+  flex: none;
+  transition: background 0.25s, color 0.25s, transform 0.3s;
+}
+.svc__go svg {
+  width: 15px;
+  height: 15px;
+}
+.svc-row {
+  margin-top: calc(var(--u) * 2.2);
+}
+.svc:hover .svc__go {
+  background: var(--ink);
+  color: var(--lime);
+  transform: rotate(45deg);
+}
+
+/* ==========================================================================
+   Tabs — the scroll replacement
+   ========================================================================== */
+.tabs {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+}
+.tabs__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: calc(var(--u) * 1.15);
+  flex: none;
+}
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 17px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--ink-70);
+  font-size: clamp(0.8rem, calc(var(--u) * 0.95), 0.9rem);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+  white-space: nowrap;
+}
+.tab svg {
+  width: 15px;
+  height: 15px;
+  color: var(--moss);
+  transition: color 0.2s;
+}
+.tab:hover {
+  border-color: var(--ink);
+  transform: translateY(-1px);
+}
+.tab[aria-selected="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--white);
+}
+.tab[aria-selected="true"] svg {
+  color: var(--lime);
+}
+
+.tabs__panels {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  align-items: center; /* centres a short panel, fills a tall one */
+}
+.panel {
+  display: none;
+  width: 100%;
+  min-height: 0;
+}
+.panel.is-active {
+  display: block;
+  animation: fade 0.28s ease-out;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* Media inside a panel is height-capped so a photo can never push the
+   panel past one screen. Frames crop with object-fit, so nothing distorts. */
+.panel .frame {
+  height: min(34vh, 300px);
+  aspect-ratio: auto;
+}
+.panel .collage {
+  height: min(34vh, 300px);
+  grid-template-rows: 1fr 1fr;
+}
+.panel .collage .frame {
+  height: 100%;
+}
+/* For panels where a photo shares a column with other blocks. */
+.panel .frame--short {
+  height: min(24vh, 205px);
+}
+
+/* ==========================================================================
+   Cards
+   ========================================================================== */
+.card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: calc(var(--u) * 1.7) calc(var(--u) * 1.6);
+  transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.3s,
+    border-color 0.25s;
+  min-width: 0;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--lime);
+}
+.card__ico {
+  width: clamp(38px, calc(var(--u) * 4.6), 48px);
+  height: clamp(38px, calc(var(--u) * 4.6), 48px);
+  border-radius: var(--r-sm);
+  background: var(--mint);
+  display: grid;
+  place-items: center;
+  color: var(--moss);
+  margin-bottom: calc(var(--u) * 1.1);
+  flex: none;
+}
+
+/* Compact horizontal variant — icon beside the text instead of above it.
+   Roughly halves card height, which is what lets a dense panel fit one screen. */
+.card--row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: calc(var(--u) * 1.3) calc(var(--u) * 1.4);
+}
+.card--row .card__ico {
+  width: clamp(32px, calc(var(--u) * 3.8), 40px);
+  height: clamp(32px, calc(var(--u) * 3.8), 40px);
+  margin-bottom: 0;
+  border-radius: 9px;
+}
+.card--row > div {
+  min-width: 0;
+}
+.card__ico svg {
+  width: 55%;
+  height: 55%;
+}
+.card h3 {
+  margin-bottom: 5px;
+}
+.card p {
+  font-size: clamp(0.79rem, calc(var(--u) * 0.94), 0.9rem);
+  color: var(--ink-50);
+}
+
+/* ---------- Check list ---------- */
+.checks {
+  display: grid;
+  gap: calc(var(--u) * 0.9);
+}
+.checks li {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  font-size: clamp(0.82rem, calc(var(--u) * 0.98), 0.95rem);
+  color: var(--ink-70);
+  line-height: 1.45;
+}
+.checks li::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--lime)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310120e' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E")
+    center / 12px no-repeat;
+  margin-top: 1px;
+}
+.checks--2 {
+  grid-template-columns: 1fr 1fr;
+  gap: calc(var(--u) * 0.9) clamp(16px, 2.4vw, 34px);
+}
+.checks--3 {
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(var(--u) * 0.9) clamp(16px, 2.4vw, 34px);
+}
+
+/* ---------- Photo frames ---------- */
+.frame {
+  position: relative;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  background: var(--mint);
+  box-shadow: var(--shadow-lg);
+  min-height: 0;
+}
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.frame--tall {
+  aspect-ratio: 4 / 5;
+}
+.frame--wide {
+  aspect-ratio: 16 / 10;
+}
+
+.collage {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  height: 100%;
+  min-height: 0;
+}
+.collage .frame:first-child {
+  grid-row: span 2;
+}
+.collage .frame {
+  border-radius: var(--r-lg);
+}
+
+
+/* ==========================================================================
+   Pricing
+   ========================================================================== */
+.price {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: calc(var(--u) * 1.3) calc(var(--u) * 1.45);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 0.8);
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.3s,
+    border-color 0.25s;
+  min-width: 0;
+}
+.price:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lift);
+  border-color: var(--lime);
+}
+.price--feature {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.price--feature h3,
+.price--feature .price__amt {
+  color: var(--white);
+}
+.price--feature .price__per,
+.price--feature p {
+  color: rgba(255, 255, 255, 0.62);
+}
+.price--feature .checks li {
+  color: rgba(255, 255, 255, 0.82);
+}
+.price .checks {
+  gap: calc(var(--u) * 0.6);
+}
+/* Explicit height, not aspect-ratio: as a column flex item the ratio does not
+   resolve and the tile stretches into a bar. */
+.price__ico {
+  width: clamp(32px, calc(var(--u) * 3.8), 40px);
+  height: clamp(32px, calc(var(--u) * 3.8), 40px);
+  flex: none;
+  border-radius: var(--r-sm);
+  background: var(--mint);
+  display: grid;
+  place-items: center;
+  color: var(--moss);
+}
+.price--feature .price__ico {
+  background: rgba(168, 219, 90, 0.16);
+  color: var(--lime);
+}
+.price__ico svg {
+  width: 21px;
+  height: 21px;
+}
+.price__amt {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.7rem, calc(var(--u) * 2.7), 2.4rem);
+  color: var(--ink);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.price__per {
+  font-family: var(--font-body);
+  font-size: clamp(0.76rem, calc(var(--u) * 0.9), 0.88rem);
+  font-weight: 600;
+  color: var(--ink-50);
+  letter-spacing: 0;
+}
+.price p {
+  font-size: clamp(0.79rem, calc(var(--u) * 0.94), 0.9rem);
+  color: var(--ink-50);
+}
+.price__note {
+  margin-top: auto;
+  padding-top: calc(var(--u) * 0.8);
+  border-top: 1px dashed var(--line);
+  font-size: clamp(0.74rem, calc(var(--u) * 0.88), 0.84rem);
+  color: var(--ink-50);
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  line-height: 1.45;
+}
+.price--feature .price__note {
+  border-color: rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.62);
+}
+.price__note svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  margin-top: 3px;
+  color: var(--lime-deep);
+}
+.price__flag {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  background: var(--lime);
+  color: var(--ink);
+}
+
+/* ==========================================================================
+   Info rows / hours / notes
+   ========================================================================== */
+.info {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: calc(var(--u) * 1.5) calc(var(--u) * 1.5);
+  display: flex;
+  gap: 13px;
+  align-items: flex-start;
+  transition: transform 0.28s, box-shadow 0.28s, border-color 0.25s;
+  min-width: 0;
+}
+.info:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--lime);
+}
+.info__ico {
+  width: clamp(34px, calc(var(--u) * 4.2), 44px);
+  height: clamp(34px, calc(var(--u) * 4.2), 44px);
+  border-radius: var(--r-sm);
+  background: var(--mint);
+  display: grid;
+  place-items: center;
+  color: var(--moss);
+  flex: none;
+}
+.info__ico svg {
+  width: 52%;
+  height: 52%;
+}
+.info h3 {
+  font-size: 0.74rem;
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--ink-50);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 4px;
+}
+.info__v {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(0.94rem, calc(var(--u) * 1.16), 1.1rem);
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  word-break: break-word;
+}
+.info__v a:hover {
+  color: var(--moss);
+}
+.info p {
+  font-size: clamp(0.76rem, calc(var(--u) * 0.88), 0.86rem);
+  color: var(--ink-50);
+  margin-top: 3px;
+}
+
+.hours {
+  display: grid;
+}
+.hours li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: calc(var(--u) * 1) 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: clamp(0.84rem, calc(var(--u) * 0.98), 0.96rem);
+}
+.hours li:last-child {
+  border-bottom: 0;
+}
+.hours b {
+  font-weight: 700;
+  color: var(--ink);
+}
+.hours span {
+  color: var(--ink-50);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.note {
+  display: flex;
+  gap: 13px;
+  align-items: flex-start;
+  background: var(--mint);
+  border-radius: var(--r-lg);
+  padding: calc(var(--u) * 1.5) calc(var(--u) * 1.6);
+}
+.note__ico {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--white);
+  display: grid;
+  place-items: center;
+  color: var(--moss);
+  flex: none;
+}
+.note__ico svg {
+  width: 18px;
+  height: 18px;
+}
+.note h3 {
+  font-size: clamp(0.92rem, calc(var(--u) * 1.1), 1.02rem);
+  margin-bottom: 4px;
+}
+.note p {
+  font-size: clamp(0.79rem, calc(var(--u) * 0.92), 0.89rem);
+  color: var(--ink-70);
+}
+.note--ink {
+  background: var(--ink);
+}
+.note--ink h3 {
+  color: var(--white);
+}
+.note--ink p {
+  color: rgba(255, 255, 255, 0.7);
+}
+.note--ink .note__ico {
+  background: rgba(168, 219, 90, 0.16);
+  color: var(--lime);
+}
+
+/* Map */
+.map {
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-md);
+  background: var(--pewter-soft);
+  height: 100%;
+  min-height: 240px;
+}
+.map iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+  border: 0;
+  display: block;
+}
+
+/* ==========================================================================
+   Page header (interior pages)
+   ========================================================================== */
+.phead {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: clamp(18px, 3vw, 48px);
+  align-items: center;
+  margin-bottom: calc(var(--u) * 1.6);
+  flex: none;
+}
+/* Cap the header image by viewport height, not aspect ratio — it is the single
+   biggest driver of how much room the tab panels get. */
+.phead .frame {
+  aspect-ratio: auto;
+  height: min(27vh, 250px);
+}
+.phead__copy > * + * {
+  margin-top: calc(var(--u) * 1.1);
+}
+.crumbs {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  color: var(--ink-50);
+  font-weight: 600;
+}
+.crumbs a:hover {
+  color: var(--moss);
+}
+.crumbs svg {
+  width: 12px;
+  height: 12px;
+  opacity: 0.5;
+}
+.crumbs b {
+  color: var(--ink);
+  font-weight: 700;
+}
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fact {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  padding: 7px 14px;
+  border-radius: var(--r-pill);
+  font-size: clamp(0.74rem, calc(var(--u) * 0.88), 0.85rem);
+  font-weight: 600;
+  color: var(--ink-70);
+}
+.fact svg {
+  width: 14px;
+  height: 14px;
+  color: var(--moss);
+  flex: none;
+}
+
+/* ==========================================================================
+   Screen footer — one compact bar, no big footer block
+   ========================================================================== */
+.sfoot {
+  flex: none;
+  border-top: 1px solid var(--line);
+  background: var(--white);
+}
+.sfoot__inner {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding: calc(var(--u) * 1.05) var(--gut);
+  display: flex;
+  align-items: center;
+  gap: 14px 22px;
+  flex-wrap: wrap;
+  font-size: clamp(0.72rem, calc(var(--u) * 0.86), 0.83rem);
+  color: var(--ink-50);
+}
+.sfoot__inner a:hover {
+  color: var(--moss);
+}
+.sfoot__sep {
+  color: var(--line);
+}
+.sfoot__right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px 20px;
+  flex-wrap: wrap;
+}
+.sfoot b {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* Idle float — decorative only, unrelated to scrolling */
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+.float--2 {
+  animation-duration: 7.5s;
+  animation-delay: -2s;
+}
+.float--3 {
+  animation-duration: 8.5s;
+  animation-delay: -4s;
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 1080px) {
+  .nav__tel {
+    display: none;
+  }
+  .checks--3 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 940px) {
+  .nav__links,
+  .nav__cta {
+    display: none;
+  }
+  .burger {
+    display: grid;
+  }
+  .hero__grid,
+  .phead,
+  .split,
+  .split--wide-l,
+  .split--wide-r {
+    grid-template-columns: 1fr;
+  }
+  .hero__art {
+    order: -1;
+    max-width: 420px;
+    margin-inline: auto;
+  }
+  .g-3,
+  .g-4 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ---- Short laptop screens (1280×720, 1366×768 …): shed decoration before
+        shedding information. The price icon and hero breathing room go first. ---- */
+@media (min-width: 901px) and (max-height: 840px) {
+  .price__ico {
+    display: none;
+  }
+  .price {
+    gap: calc(var(--u) * 0.7);
+  }
+  .svc {
+    padding: 8px 14px 8px 8px;
+  }
+  .svc-row {
+    margin-top: calc(var(--u) * 1.4);
+  }
+  .hero__art svg.scene {
+    max-height: calc(100dvh - var(--nav-h) - var(--u) * 26);
+  }
+  .phead .frame {
+    height: min(25vh, 220px);
+  }
+}
+
+/* ---- Fallback: when one screen genuinely cannot hold the content, scroll.
+        Clipping content out of reach would be worse than a scrollbar. ---- */
+@media (max-width: 900px), (max-height: 620px) {
+  body {
+    overflow-y: auto;
+    overflow-x: hidden; /* keep the decorative blobs from widening the page */
+  }
+  .screen {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+  .screen__body {
+    padding-block: 24px 32px;
+  }
+  .hero__art svg.scene {
+    max-height: none;
+  }
+  .collage {
+    height: auto;
+  }
+  .collage .frame {
+    aspect-ratio: 4 / 3;
+  }
+  .collage .frame:first-child {
+    aspect-ratio: 3 / 4;
+  }
+  .map,
+  
+@media (max-width: 640px) {
+  .g-2,
+  .g-3,
+  .g-4,
+  .checks--2,
+  .checks--3 {
+    grid-template-columns: 1fr;
+  }
+  .chip {
+    font-size: 0.72rem;
+  }
+  .chip--a {
+    left: 0;
+  }
+  .chip--b {
+    right: 0;
+  }
+  .tabs__list {
+    gap: 6px;
+  }
+  .tab {
+    padding: 8px 13px;
+  }
+  .sfoot__right {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@media print {
+  body {
+    overflow: visible;
+    color: #000;
+  }
+  .nav,
+  .drawer {
+    display: none !important;
+  }
+  .screen {
+    height: auto;
+  }
+  .panel {
+    display: block !important;
+  }
+}

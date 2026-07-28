@@ -1,0 +1,81 @@
+<!-- Dev harness: loads every page at several viewport sizes in an iframe and
+     reports whether any tab panel overflows its single screen.
+     Open http://127.0.0.1:4173/_partials/fitcheck.html while the site is served. -->
+<style>
+  body { font: 13px ui-monospace, monospace; padding: 20px; background:#111; color:#ddd; }
+  h1 { font: 700 16px system-ui; margin-bottom: 12px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { text-align: left; padding: 5px 10px; border-bottom: 1px solid #333; }
+  th { color:#888; font-weight:600; }
+  .ok { color:#8cc63f; }
+  .bad { color:#ff6b6b; font-weight:700; }
+  iframe { position:fixed; left:-10000px; top:0; border:0; }
+  #sum { margin-top:14px; font: 700 14px system-ui; }
+</style>
+<h1>Complete Canine — one-screen fit check</h1>
+<table id="t"><thead><tr><th>page</th><th>viewport</th><th>tab</th><th>slack (px)</th></tr></thead><tbody></tbody></table>
+<div id="sum">running…</div>
+<script>
+const PAGES = ['index.html','boarding.html','daycare.html','grooming.html','about.html'];
+const SIZES = [[1440,900],[1512,860],[1280,800],[1280,720],[1366,768],[1920,1080]];
+const tbody = document.querySelector('#t tbody');
+let fails = 0, rows = 0;
+
+function probe(win){
+  const doc = win.document;
+  const foot = doc.querySelector('.sfoot');
+  if(!foot) return [{tab:'(no footer)', slack: 0}];
+  const footTop = foot.getBoundingClientRect().top;
+  const pb = doc.querySelector('.tabs__panels');
+  if(!pb){
+    const body = doc.querySelector('.screen__body');
+    const last = body.lastElementChild;
+    return [{tab:'(single screen)', slack: Math.round(footTop - last.getBoundingClientRect().bottom)}];
+  }
+  const tabs = [...doc.querySelectorAll('[role=tab]')];
+  const limit = footTop - pb.getBoundingClientRect().top;
+  const out = tabs.map(t => {
+    t.click();
+    const p = doc.getElementById(t.getAttribute('aria-controls'));
+    return { tab: t.textContent.trim(), slack: Math.round(limit - p.scrollHeight) };
+  });
+  tabs[0].click();
+  return out;
+}
+
+async function run(){
+  for(const [w,h] of SIZES){
+    for(const page of PAGES){
+      const f = document.createElement('iframe');
+      f.width = w; f.height = h; f.src = '../' + page;
+      document.body.appendChild(f);
+      await new Promise(r => f.onload = r);
+      await new Promise(r => setTimeout(r, 220)); // let fonts/images settle
+      let res;
+      try { res = probe(f.contentWindow); }
+      catch(e){ res = [{tab:'ERROR '+e.message, slack:-9999}]; }
+      const scrolls = f.contentDocument.documentElement.scrollHeight > h + 1;
+      for(const r of res){
+        rows++;
+        const bad = r.slack < 0;
+        if(bad) fails++;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${page}</td><td>${w}×${h}</td><td>${r.tab}</td>
+          <td class="${bad?'bad':'ok'}">${r.slack >= 0 ? '+'+r.slack : r.slack}</td>`;
+        tbody.appendChild(tr);
+      }
+      if(scrolls && w > 900 && h > 620){
+        fails++;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${page}</td><td>${w}×${h}</td><td>PAGE SCROLLS</td><td class="bad">yes</td>`;
+        tbody.appendChild(tr);
+      }
+      f.remove();
+    }
+  }
+  document.getElementById('sum').innerHTML = fails === 0
+    ? `<span class="ok">PASS — ${rows} panel/viewport combinations, none overflow, no page scrolls.</span>`
+    : `<span class="bad">FAIL — ${fails} problem(s) across ${rows} checks.</span>`;
+}
+run();
+</script>

@@ -1,0 +1,394 @@
+@charset "UTF-8";
+/*reset*/
+body,
+div,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+dl,
+dt,
+dd,
+a,
+img {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+  font-size: 16px;
+}
+ol,
+ul {
+  list-style: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  font-size: 100%;
+}
+img {
+  border: none;
+}
+h1,
+h2,
+h3,
+p,
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
+ul li {
+  list-style-type: none;
+}
+/*end reset*/
+body {
+  background-color: #dbdcd7;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 100%;
+}
+/* force scroll bar to appear even on short pages and avoid page shift */
+html {
+  overflow-y: scroll;
+}
+.notice {
+  background-color: #97b962;
+  /* temp - make notice wider for extra message
+  width:35%; */
+  width: 85%;
+  margin: 15px auto;
+  padding: 15px;
+  font-size: 18px;
+  text-align: center;
+  border: 1px solid;
+}
+.notice a {
+  font-size: 18px;
+}
+.notice a:hover {
+  color: black;
+}
+/* remove notice */
+.notice {
+  display:none;
+}
+.content {
+  padding-top: 20px;
+  padding-bottom: 30px;
+  clear: both;
+}
+h1 {
+  font-size: 22px;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 10px;
+}
+h2 {
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+}
+
+#about .content h3 {
+  font-size: 16px;
+  margin-top: -8px;
+  font-weight: normal;
+  font-style: italic;
+}
+p {
+  color: black;
+  font-size: 16px;
+  line-height: 125%;
+  padding-bottom: 15px;
+}
+ul li {
+  line-height: 125%;
+}
+a,
+a:visited {
+  color: #1f4165;
+  text-decoration: underline;
+}
+a:hover,
+a:active,
+a:focus {
+  color: #97b962;
+}
+.centerpage {
+  width: 960px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.colorbar {
+  background-color: #97b962;
+  height: 25px;
+  border-bottom-width: 5px;
+  border-bottom-style: solid;
+  border-bottom-color: #1f4165;
+}
+#header {
+  height: 350px;
+  width: 960px;
+  background-repeat: no-repeat;
+  background-position: left top;
+}
+.headertext {
+  margin-top: -130px;
+}
+.headertext h1 {
+  font-size: 20px;
+  color: #97b962;
+  font-weight: bold;
+  font-family: Verdana, Geneva, sans-serif;
+}
+.headertext p {
+  font-size: 18px;
+  color: #1f4165;
+  line-height: 120%;
+  padding-bottom: 0px;
+}
+.headertext a {
+  color: #1f4165;
+  text-decoration: none;
+  font-size: 20px;
+}
+#footer {
+  background-color: #97b962;
+  height: 25px;
+  border-top-width: 5px;
+  border-top-style: solid;
+  border-top-color: #1f4165;
+}
+p.phone {
+  padding-top: 5px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.credit {
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 12px;
+  color: black;
+}
+.credit a,
+.credit a:visited {
+  font-size: 12px;
+  color: black;
+  text-decoration: underline;
+}
+/* navigation */
+.navcol {
+  background-color: #97b962;
+  height: 25px;
+}
+.nav a,
+.nav a:visited {
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #1f4165;
+  padding-top: 2px;
+  height: 32px;
+  display: block;
+  text-align: center;
+  font-family: Verdana, Geneva, sans-serif;
+}
+.nav li {
+  width: 180px;
+  float: left;
+}
+
+.nav a:hover,
+.nav a:active,
+.nav a:focus {
+  color: #fff;
+}
+
+/* keep menu tab lit when page is current */
+#home .home,
+#boarding .boarding,
+#training .training,
+#grooming .grooming,
+#daycare .daycare,
+#about .about {
+  color: #fff;
+}
+/* floats */
+.floatr {
+  float: right;
+}
+.floatl {
+  float: left;
+}
+.clearfloat {
+  clear: both;
+  height: 0;
+  font-size: 1px;
+  line-height: 0px;
+}
+.homecol {
+  width: 320px;
+  float: left;
+}
+.homecol a {
+  font-size: 18px;
+  font-weight: bold;
+  color: #1f4165;
+}
+.homecol a:hover,
+.homecol a:active,
+.homecol a:focus {
+  color: #97b962;
+}
+.homecolpad {
+  padding-top: 20px;
+  padding-right: 40px;
+
+}
+.brownframe {
+  border: 6px solid #9a8362;
+}
+.greenframe {
+  border: 6px solid #97b962;
+}
+.blueframe {
+  border: 6px solid #1f4165;
+}
+.photocol {
+  width: 526px;
+  float: right;
+}
+.textcol {
+  width: 414px;
+  float: left;
+}
+.padright {
+  padding-right: 20px;
+}
+/* for second line of li to line up, use outside for li position and add padding left for ul*/
+ul.bullet {
+  padding-bottom: 15px;
+  padding-left: 20px;
+}
+.bullet li {
+  list-style-type: disc;
+  list-style-position: outside;
+  line-height: 120%;
+  margin-bottom: 10px;
+}
+.margintop {
+  margin-top: 15px;
+}
+.marginright {
+  margin-right: 8px;
+}
+.marginleftbot {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+.center {
+  text-align: center;
+}
+.hours {
+  width: 298px;
+  margin-top: 20px;
+  text-align: center;
+}
+#about .hours {
+  width: 100%;
+  margin-bottom: 20px;
+}
+#about .blueframe {
+  margin-top:20px;
+}
+#daycare .hours {
+  /*float: left;*/
+  width: 100%;
+  padding-top: 10px;
+}
+.hours li {
+  padding-right: 5px;
+}
+
+.classlist li {
+  line-height: 200%;
+}
+.classlist a {
+  font-weight: bold;
+}
+#schedule {
+  width: 100%;
+  margin-bottom: 30px;
+}
+td,
+th {
+  padding: 5px;
+  background-color: #ecede7;
+  border: 1px solid #000;
+}
+th {
+  background-color: #97b962;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-bottom-color: #000;
+}
+.tinted td {
+  background-color: #dee5d2;
+}
+.biophoto {
+  float: left;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+#daycare .biophoto {
+  float: right;
+  margin-right: 0px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+caption {
+  caption-side: bottom;
+  text-align: right;
+}
+
+.bcaption {
+  float: right;
+  padding-top: 15px;
+  width: 244px;
+}
+.bcaption p {
+  margin-left: 20px;
+}
+.note {
+  background-color: #dee5d2;
+  border: 5px solid #97b962;
+  padding: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* color reference
+background gray
+dark blue 1f4165
+green 97b962
+*/
