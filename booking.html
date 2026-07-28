@@ -182,11 +182,6 @@
             <small>Weekdays 7:30-6, weekends 8:30-4.</small>
           </div>
         </div>
-
-        <a class="admin-mini" href="admin.html">
-          <svg><use href="#i-key"></use></svg>
-          Admin board
-        </a>
       </div>
 
       <form class="booking-form" data-booking-form>
@@ -195,7 +190,7 @@
             <span class="eyebrow">New request</span>
             <h2 class="h-2">Booking details</h2>
           </div>
-          <span class="form-paw" aria-hidden="true"><svg><use href="#i-paw"></use></svg></span>
+          <span class="form-paw" data-admin-secret aria-hidden="true"><svg><use href="#i-paw"></use></svg></span>
         </div>
 
         <div class="service-choices" role="radiogroup" aria-label="Service">
@@ -301,9 +296,8 @@
         <div class="booking-success" data-booking-success hidden>
           <div class="booking-success__ico"><svg><use href="#i-check"></use></svg></div>
           <div>
-            <h3 class="h-4">Request saved to the admin board</h3>
+            <h3 class="h-4">Request saved</h3>
             <p>Reference <b data-booking-id></b>. We still need to confirm availability.</p>
-            <a href="admin.html">Open admin board</a>
           </div>
         </div>
       </form>

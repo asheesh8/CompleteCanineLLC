@@ -160,6 +160,23 @@
   if (bookingForm) {
     setDateMinimums(bookingForm);
 
+    var secretPaw = document.querySelector("[data-admin-secret]");
+    var secretClicks = 0;
+    var secretTimer = null;
+    if (secretPaw) {
+      secretPaw.addEventListener("click", function () {
+        secretClicks += 1;
+        window.clearTimeout(secretTimer);
+        if (secretClicks >= 3) {
+          window.location.href = "admin.html";
+          return;
+        }
+        secretTimer = window.setTimeout(function () {
+          secretClicks = 0;
+        }, 900);
+      });
+    }
+
     bookingForm.addEventListener("submit", function (e) {
       e.preventDefault();
       if (!bookingForm.checkValidity()) {

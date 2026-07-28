@@ -1474,21 +1474,6 @@ p {
   line-height: 1.25;
   margin-top: 3px;
 }
-.admin-mini {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  color: var(--ink-50);
-  font-size: 0.82rem;
-  font-weight: 700;
-}
-.admin-mini:hover {
-  color: var(--moss);
-}
-.admin-mini svg {
-  width: 15px;
-  height: 15px;
-}
 .booking-form {
   position: relative;
   min-width: 0;
@@ -1524,6 +1509,8 @@ p {
   background: var(--ink);
   color: var(--lime);
   flex: none;
+  cursor: pointer;
+  user-select: none;
 }
 .form-paw svg {
   width: 24px;
@@ -1760,7 +1747,7 @@ p {
 }
 
 /* ==========================================================================
-   Admin board
+   Admin request board
    ========================================================================== */
 .screen--admin {
   background: linear-gradient(180deg, var(--paper) 0%, var(--white) 100%);
