@@ -29,6 +29,7 @@ Regenerates the five root `.html` files, `sitemap.xml`, `robots.txt` and the leg
 
 ```
 index.html  boarding.html  daycare.html  grooming.html  about.html   ← generated, deploy these
+booking.html  admin.html                                             ← booking flow + local admin board
 about_complete_canine.html                                           ← redirect to about.html (old URL)
 sitemap.xml  robots.txt                                              ← generated
 build.py                    assembles pages from _pages + _partials
@@ -40,7 +41,7 @@ _partials/
 _source/                    archived copy of the original site (HTML, CSS, photos)
 assets/
   css/style.css             the whole design system
-  js/main.js                tabs + mobile menu. Nothing else.
+  js/main.js                tabs, mobile menu, booking form + local admin board
   img/                      photos, carried over from the original site
 ```
 
@@ -48,6 +49,10 @@ Edit page copy in `_pages/*.html`, not in the root `.html` files — the root fi
 are overwritten on every build. Phone, email and address live in the `BIZ` dict at
 the top of `build.py`; change them there and they update everywhere, including the
 structured data.
+
+The booking form currently writes requests to browser `localStorage` under
+`ccBookingRequests`. `admin.html` reads the same queue and updates local statuses;
+replace that storage layer with Supabase when the database is ready.
 
 ## One screen, no scrolling
 

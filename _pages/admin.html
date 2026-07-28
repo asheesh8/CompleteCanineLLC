@@ -1,0 +1,77 @@
+---
+title: Booking Admin — Complete Canine
+description: Temporary booking request board for Complete Canine. Local browser storage only until Supabase is connected.
+nav: admin
+robots: noindex,nofollow
+sitemap: false
+---
+<main class="screen screen--admin" id="main">
+  <div class="screen__body wrap admin-screen">
+    <section class="admin-layout" data-admin-app aria-labelledby="admin-title">
+      <aside class="admin-rail">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <svg><use href="#i-chev-r"></use></svg>
+          <b>Admin</b>
+        </nav>
+        <span class="badge badge--ink">Local admin</span>
+        <h1 class="h-1" id="admin-title">Booking board</h1>
+        <p class="lead">Requests submitted from the booking form appear here in this browser until Supabase is connected.</p>
+
+        <div class="admin-stats" aria-label="Booking totals">
+          <div>
+            <b data-admin-stat="new">0</b>
+            <span>New</span>
+          </div>
+          <div>
+            <b data-admin-stat="reviewing">0</b>
+            <span>Reviewing</span>
+          </div>
+          <div>
+            <b data-admin-stat="confirmed">0</b>
+            <span>Confirmed</span>
+          </div>
+        </div>
+
+        <div class="admin-filters" aria-label="Filter bookings">
+          <button type="button" class="admin-filter is-active" data-admin-filter="all">All</button>
+          <button type="button" class="admin-filter" data-admin-filter="new">New</button>
+          <button type="button" class="admin-filter" data-admin-filter="reviewing">Reviewing</button>
+          <button type="button" class="admin-filter" data-admin-filter="confirmed">Confirmed</button>
+          <button type="button" class="admin-filter" data-admin-filter="archived">Archived</button>
+        </div>
+
+        <div class="admin-note">
+          <div class="note__ico"><svg><use href="#i-key"></use></svg></div>
+          <div>
+            <h2 class="h-4">Supabase later</h2>
+            <p>The row shape is already grouped as owner, pet, schedule and care data.</p>
+          </div>
+        </div>
+
+        <a class="btn btn--ghost btn--plain" href="booking.html">New request</a>
+      </aside>
+
+      <section class="admin-queue" aria-label="Booking requests">
+        <div class="admin-toolbar">
+          <label class="admin-search">
+            <svg><use href="#i-paw"></use></svg>
+            <input type="search" data-admin-search placeholder="Search owner, pet, service">
+          </label>
+          <button type="button" class="admin-link" data-admin-clear>Clear archived</button>
+        </div>
+        <div class="admin-list" data-admin-list></div>
+      </section>
+
+      <section class="admin-detail" data-admin-detail aria-live="polite">
+        <div class="empty-state">
+          <span><svg><use href="#i-paw"></use></svg></span>
+          <h2 class="h-2">No request selected</h2>
+          <p>Choose a booking from the queue to see dates, contact details and care notes.</p>
+        </div>
+      </section>
+    </section>
+  </div>
+
+{{FOOT}}
+</main>

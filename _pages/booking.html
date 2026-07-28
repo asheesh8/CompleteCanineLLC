@@ -1,0 +1,168 @@
+---
+title: Request a Booking — Complete Canine, Plainfield NH
+description: Request boarding, daycare or grooming for your dog or cat at Complete Canine in Plainfield, NH. Share dates, pet details, vaccine status and care notes.
+nav: booking
+---
+<main class="screen screen--booking" id="main">
+  <span class="paw-dust paw-dust--a" aria-hidden="true"><svg><use href="#i-paw"></use></svg><svg><use href="#i-paw"></use></svg><svg><use href="#i-paw"></use></svg></span>
+  <span class="paw-dust paw-dust--b" aria-hidden="true"><svg><use href="#i-paw"></use></svg><svg><use href="#i-paw"></use></svg></span>
+
+  <div class="screen__body wrap booking-screen">
+    <section class="booking-layout" aria-labelledby="booking-title">
+      <div class="booking-copy">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <a href="index.html">Home</a>
+          <svg><use href="#i-chev-r"></use></svg>
+          <b>Book</b>
+        </nav>
+        <span class="badge">Reservation request</span>
+        <h1 class="h-1" id="booking-title">Tell us about your <span class="hl">good dog</span></h1>
+        <p class="lead tight">Send the details we need for boarding, daycare or grooming. We will confirm availability before anything is final.</p>
+
+        <div class="booking-photo">
+          <img src="assets/img/HOMEboarding.jpg" alt="A dog in the fenced play area at Complete Canine" width="230" height="190">
+          <span class="booking-photo__paw"><svg><use href="#i-paw"></use></svg></span>
+        </div>
+
+        <div class="booking-perks" aria-label="Helpful details">
+          <div class="booking-perk">
+            <span><svg><use href="#i-shield"></use></svg></span>
+            <b>Vaccines checked</b>
+            <small>Rabies, Distemper and Kennel Cough.</small>
+          </div>
+          <div class="booking-perk">
+            <span><svg><use href="#i-clock"></use></svg></span>
+            <b>Open daily</b>
+            <small>Weekdays 7:30-6, weekends 8:30-4.</small>
+          </div>
+        </div>
+
+        <a class="admin-mini" href="admin.html">
+          <svg><use href="#i-key"></use></svg>
+          Admin board
+        </a>
+      </div>
+
+      <form class="booking-form" data-booking-form>
+        <div class="booking-form__head">
+          <div>
+            <span class="eyebrow">New request</span>
+            <h2 class="h-2">Booking details</h2>
+          </div>
+          <span class="form-paw" aria-hidden="true"><svg><use href="#i-paw"></use></svg></span>
+        </div>
+
+        <div class="service-choices" role="radiogroup" aria-label="Service">
+          <label class="service-choice">
+            <input type="radio" name="service" value="Boarding" checked>
+            <span class="service-choice__ico"><svg><use href="#i-moon"></use></svg></span>
+            <span><b>Boarding</b><small>Overnight stays</small></span>
+          </label>
+          <label class="service-choice">
+            <input type="radio" name="service" value="Daycare">
+            <span class="service-choice__ico"><svg><use href="#i-sun"></use></svg></span>
+            <span><b>Daycare</b><small>Day play</small></span>
+          </label>
+          <label class="service-choice">
+            <input type="radio" name="service" value="Grooming">
+            <span class="service-choice__ico"><svg><use href="#i-scissors"></use></svg></span>
+            <span><b>Grooming</b><small>Baths, trims, nails</small></span>
+          </label>
+        </div>
+
+        <div class="form-grid form-grid--3">
+          <label class="field">
+            <span>Owner name</span>
+            <input name="ownerName" autocomplete="name" required>
+          </label>
+          <label class="field">
+            <span>Phone</span>
+            <input name="phone" type="tel" autocomplete="tel" required>
+          </label>
+          <label class="field">
+            <span>Email</span>
+            <input name="email" type="email" autocomplete="email">
+          </label>
+
+          <label class="field">
+            <span>Pet name</span>
+            <input name="petName" required>
+          </label>
+          <label class="field">
+            <span>Pet type</span>
+            <select name="petType" required>
+              <option value="Dog">Dog</option>
+              <option value="Cat">Cat</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Breed / size</span>
+            <input name="breedSize" placeholder="Lab, 55 lb">
+          </label>
+
+          <label class="field">
+            <span>Arrival date</span>
+            <input name="startDate" type="date" required>
+          </label>
+          <label class="field">
+            <span>Arrival time</span>
+            <input name="startTime" type="time" required>
+          </label>
+          <label class="field">
+            <span>Pickup date</span>
+            <input name="endDate" type="date" required>
+          </label>
+        </div>
+
+        <div class="care-row">
+          <label class="field field--compact">
+            <span>Temperament</span>
+            <select name="temperament">
+              <option value="Easygoing">Easygoing</option>
+              <option value="Shy">Shy</option>
+              <option value="High energy">High energy</option>
+              <option value="Needs solo play">Needs solo play</option>
+            </select>
+          </label>
+          <label class="check-pill">
+            <input type="checkbox" name="vaccinesCurrent" value="yes" required>
+            <span><svg><use href="#i-shield"></use></svg>Vaccines current</span>
+          </label>
+          <label class="check-pill">
+            <input type="checkbox" name="careFlags" value="Medication">
+            <span><svg><use href="#i-pill"></use></svg>Medication</span>
+          </label>
+          <label class="check-pill">
+            <input type="checkbox" name="careFlags" value="Bring own food">
+            <span><svg><use href="#i-bone"></use></svg>Own food</span>
+          </label>
+        </div>
+
+        <label class="field field--full">
+          <span>Care notes</span>
+          <textarea name="notes" rows="3" placeholder="Allergies, pickup notes, grooming requests, play preferences"></textarea>
+        </label>
+
+        <div class="booking-actions">
+          <button class="btn btn--primary" type="submit">
+            Send request <span class="btn__ico"><svg><use href="#i-arrow"></use></svg></span>
+          </button>
+          <a class="btn btn--ghost" href="tel:{{TEL}}">
+            Call instead <span class="btn__ico"><svg><use href="#i-phone"></use></svg></span>
+          </a>
+        </div>
+
+        <div class="booking-success" data-booking-success hidden>
+          <div class="booking-success__ico"><svg><use href="#i-check"></use></svg></div>
+          <div>
+            <h3 class="h-4">Request saved to the admin board</h3>
+            <p>Reference <b data-booking-id></b>. We still need to confirm availability.</p>
+            <a href="admin.html">Open admin board</a>
+          </div>
+        </div>
+      </form>
+    </section>
+  </div>
+
+{{FOOT}}
+</main>

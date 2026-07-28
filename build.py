@@ -46,6 +46,7 @@ NAV_ITEMS = [
     ("boarding", "Boarding", "boarding.html"),
     ("daycare", "Daycare", "daycare.html"),
     ("grooming", "Grooming", "grooming.html"),
+    ("booking", "Book", "booking.html"),
     ("about", "About", "about.html"),
 ]
 
@@ -56,7 +57,8 @@ def partial(name):
 
 
 # ---------------------------------------------------------------- chrome
-def head(title, desc, canonical):
+def head(title, desc, canonical, robots=""):
+    robots_meta = f'<meta name="robots" content="{robots}">\n' if robots else ""
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -64,7 +66,7 @@ def head(title, desc, canonical):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
 <meta name="description" content="{desc}">
-<link rel="canonical" href="{SITE}/{canonical}">
+{robots_meta}<link rel="canonical" href="{SITE}/{canonical}">
 <meta name="theme-color" content="#a8db5a">
 
 <meta property="og:type" content="website">
@@ -109,7 +111,7 @@ def nav(active):
       <a class="nav__tel" href="tel:{BIZ['tel']}">
         <svg><use href="#i-phone"></use></svg>{BIZ['phone']}
       </a>
-      <a class="btn btn--primary btn--sm nav__cta" href="tel:{BIZ['tel']}">
+      <a class="btn btn--primary btn--sm nav__cta" href="booking.html">
         Book a Stay <span class="btn__ico"><svg><use href="#i-arrow"></use></svg></span>
       </a>
       <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
@@ -124,10 +126,11 @@ def nav(active):
   <a class="drawer__link" href="boarding.html">Boarding <span>$28/night</span></a>
   <a class="drawer__link" href="daycare.html">Daycare <span>$18/day</span></a>
   <a class="drawer__link" href="grooming.html">Grooming</a>
+  <a class="drawer__link" href="booking.html">Book <span>Request care</span></a>
   <a class="drawer__link" href="about.html">About &amp; Contact</a>
   <div class="drawer__foot">
-    <a class="btn btn--primary" href="tel:{BIZ['tel']}">
-      Call {BIZ['phone']} <span class="btn__ico"><svg><use href="#i-phone"></use></svg></span>
+    <a class="btn btn--primary" href="booking.html">
+      Start a booking <span class="btn__ico"><svg><use href="#i-arrow"></use></svg></span>
     </a>
     <a class="btn btn--ghost" href="mailto:{BIZ['email']}">
       Email us <span class="btn__ico"><svg><use href="#i-mail"></use></svg></span>
@@ -229,14 +232,15 @@ def build():
             body = body.replace(k, v)
 
         out = (
-            head(meta["title"], meta["description"], fn)
+            head(meta["title"], meta["description"], fn, meta.get("robots", ""))
             + nav(meta.get("nav", ""))
             + body
             + scripts()
         )
         with open(os.path.join(ROOT, fn), "w", encoding="utf-8") as fh:
             fh.write(out)
-        built.append(fn)
+        if meta.get("sitemap", "true").lower() != "false":
+            built.append(fn)
         print(f"  built {fn}  ({len(out) // 1024} KB)")
 
     # legacy URL kept alive so existing links/bookmarks don't 404
