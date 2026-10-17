@@ -7,6 +7,10 @@ Static HTML/CSS/JS. No build tooling required to *serve* it — the `.html` file
 the project root are the site. `build.py` only exists so the shared header, nav and
 footer live in one place instead of being copy-pasted five times.
 
+**Live:** https://complete-canine-llc.vercel.app — Vercel serves the root `.html` files as a static site (no build command, no environment variables). Run `python3 build.py` after editing `_pages/`, `_partials/` or `_source/`, and commit the regenerated HTML.
+
+> Booking requests and the admin board use the browser's `localStorage` only — nothing is sent to the business yet.
+
 ## Run it locally
 
 ```bash
